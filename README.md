@@ -34,7 +34,7 @@ pip install -r requirements.txt
 
 - Apply for OpenAI API key: [https://beta.openai.com/account/api-keys](https://beta.openai.com/account/api-keys)
 
-Open the **.env** file and update the configuration values it contains to reflect the `OUR_LINE_CHANNEL_ACCESS_TOKEN`, `YOUR_LINE_CHANNEL_SECRET` and `YOUR_CHATGPT_TOKEN` for your cognitive services resource. Save your changes.
+Open the **appsettings.json** file and update the configuration values it contains to reflect the `OUR_LINE_CHANNEL_ACCESS_TOKEN`, `YOUR_LINE_CHANNEL_SECRET` and `YOUR_CHATGPT_TOKEN` for your cognitive services resource. Save your changes.
 
 ![Untitled](figure/Untitled.png)
 
@@ -43,7 +43,7 @@ Open the **.env** file and update the configuration values it contains to reflec
 Run the app:
 
 ```bash
-python main.py
+python app.py
 ```
 
 Browse to the sample application at `http://localhost:5000` in a web browser.
@@ -60,33 +60,41 @@ In the application folder, open VS Code:
 code .
 ```
 
-## (Optional) Use NGROK
+Locate the Azure icon in the left-hand toolbar. Select it to bring up the Azure Tools for VS Code extension.
 
-Download Link: [ngrok - download](https://ngrok.com/download)
+If you do not see the Azure Tools icon, make sure you have the Azure Tools extension for VS Code installed.
 
-```bash
-# Add authtoken
-ngrok config add-authtoken <token>
+In the Azure Tools extension for VS Code:
 
-# Start a tunnel
-ngrok.exe http 5000
-```
+1. Login
+2. Find the **RESOURCES** section and select your subscription.
+3. Check out the App Service you have created.
 
 ![Untitled](figure/Untitled%202.png)
+
+Deploy your application code.
+
+![Untitled](figure/Untitled%203.png)
+
+![Untitled](figure/Untitled%204.png)
+
+Browse to the deployed application in your web browser at the URL `http://<app-name>.azurewebsites.net`. If you see a default app page, wait a minute and refresh the browser.
+
+![Untitled](figure/Untitled%205.png)
 
 ## Configure LINE WebHooks
 
 Copy `https URL`.
 
-![Untitled](figure/Untitled%203.png)
+![Untitled](figure/Untitled%206.png)
 
 Paste Your `<https URL>/callback` before verifying.
 
-![Untitled](figure/Untitled%204.png)
+![Untitled](figure/Untitled%207.png)
 
 Verification successful.
 
-![Untitled](figure/Untitled%205.png)
+![Untitled](figure/Untitled%208.png)
 
 # Reference
 

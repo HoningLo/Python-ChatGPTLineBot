@@ -5,14 +5,14 @@ Created on Sat Jan 15 22:47:35 2022
 @author: lo
 """
 
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 import os
 
 # import requests
 # from datetime import datetime
 
 from flask import Flask, request, abort
-# import json, time
+import json
 
 from linebot import (
     LineBotApi, WebhookHandler
@@ -24,12 +24,13 @@ from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
 )
 
-from ChatGPT import chatGPT
+from OpenAI.ChatGPT import chatGPT
 
 # Get Configuration Settings
-load_dotenv()
-channel_access_token = os.getenv('LINE_CHANNEL_ACCESS_TOKEN')
-channel_secret = os.getenv('LINE_CHANNEL_SECRET')
+CONFIG = json.load(open("./appsettings.json", "r"))
+channel_access_token = CONFIG["Line"]["LINE_CHANNEL_ACCESS_TOKEN"]
+channel_secret = CONFIG["Line"]["LINE_CHANNEL_SECRET"]
+chatGPT_token = CONFIG["OpenAI"]["CHATGPT_TOKEN"]
 
 app = Flask(__name__)
 
@@ -63,12 +64,11 @@ def callback():
 # 處理訊息
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    message = TextSendMessage(text=chatGPT(event.message.text))
+    message = TextSendMessage(text=chatGPT(event.message.text, chatGPT_token))
     line_bot_api.reply_message(event.reply_token, message)
 
 
 if __name__ == "__main__":
-    port = int(os.environ.get('PORT',50000))
+    port = int(os.environ.get('PORT', 5000))
     app.run(port=port, debug=True)
-
 
