@@ -6,17 +6,25 @@
 
 1. Open Git Bash.
 2. Clone.
-    
-    ```bash
-    # 複製 git 到本地
-    git clone https://github.com/HoningLo/Python-ChatGPTLineBot.git
-    cd Python-ChatGPTLineBot
-    ```
-    
+
+```bash
+# 複製 git 到本地
+git clone https://github.com/HoningLo/Python-ChatGPTLineBot.git
+cd Python-ChatGPTLineBot
+```
 
 ### **Requirements**
 
 - Python >= 3.7
+
+Create a virtual environment:
+
+```bash
+python -m venv .venv
+.venv\scripts\activate
+```
+
+Install the dependencies:
 
 ```bash
 pip install -r requirements.txt
@@ -24,17 +32,35 @@ pip install -r requirements.txt
 
 ## Configuration
 
+- Apply for OpenAI API key: [https://beta.openai.com/account/api-keys](https://beta.openai.com/account/api-keys)
+
 Open the **.env** file and update the configuration values it contains to reflect the `OUR_LINE_CHANNEL_ACCESS_TOKEN`, `YOUR_LINE_CHANNEL_SECRET` and `YOUR_CHATGPT_TOKEN` for your cognitive services resource. Save your changes.
 
 ![Untitled](figure/Untitled.png)
 
 ## Execute
 
+Run the app:
+
 ```bash
 python main.py
 ```
 
-## Use NGROK
+Browse to the sample application at `http://localhost:5000` in a web browser.
+
+![Untitled](figure/Untitled%201.png)
+
+## ****Deploy your application code to Azure****
+
+To create Azure resources in VS Code, you must have the [Azure Tools extension pack](https://marketplace.visualstudio.com/items?itemName=ms-vscode.vscode-node-azure-pack) installed and be signed into Azure from VS Code.
+
+In the application folder, open VS Code:
+
+```bash
+code .
+```
+
+## (Optional) Use NGROK
 
 Download Link: [ngrok - download](https://ngrok.com/download)
 
@@ -46,21 +72,21 @@ ngrok config add-authtoken <token>
 ngrok.exe http 5000
 ```
 
-![Untitled](figure/Untitled%201.png)
+![Untitled](figure/Untitled%202.png)
 
 ## Configure LINE WebHooks
 
 Copy `https URL`.
 
-![Untitled](figure/Untitled%202.png)
+![Untitled](figure/Untitled%203.png)
 
 Paste Your `<https URL>/callback` before verifying.
 
-![Untitled](figure/Untitled%203.png)
+![Untitled](figure/Untitled%204.png)
 
 Verification successful.
 
-![Untitled](figure/Untitled%204.png)
+![Untitled](figure/Untitled%205.png)
 
 # Reference
 
@@ -71,3 +97,7 @@ Verification successful.
 [line/line-bot-sdk-python: LINE Messaging API SDK for Python (github.com)](https://github.com/line/line-bot-sdk-python)
 
 [ngrok - Online in One Line](https://ngrok.com/)
+
+[https://learn.microsoft.com/zh-tw/azure/cognitive-services/openai/concepts/models](https://learn.microsoft.com/zh-tw/azure/cognitive-services/openai/concepts/models)
+
+[Quickstart: Deploy a Python (Django or Flask) web app to Azure - Azure App Service | Microsoft Learn](https://learn.microsoft.com/en-us/azure/app-service/quickstart-python?tabs=flask%2Cwindows%2Cazure-cli%2Cvscode-deploy%2Cdeploy-instructions-azportal%2Cterminal-bash%2Cdeploy-instructions-zip-azcli)

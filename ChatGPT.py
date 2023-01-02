@@ -22,8 +22,8 @@ def chatGPT(msg):
         "model": "text-davinci-003",
         "prompt": f"{msg}",
         "max_tokens": 4000,
-        "temperature": 0
-        }
+        "temperature": 0.5
+        }    
     response = requests.post(url, data = json.dumps(data), headers=headers)
     print(response.status_code)
     return response.json()["choices"][0]["text"]
