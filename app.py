@@ -31,7 +31,7 @@ CONFIG = json.load(open("./appsettings.json", "r"))
 channel_access_token = CONFIG["Line"]["LINE_CHANNEL_ACCESS_TOKEN"]
 channel_secret = CONFIG["Line"]["LINE_CHANNEL_SECRET"]
 chatGPT_token = CONFIG["OpenAI"]["CHATGPT_TOKEN"]
-
+user = "user"
 app = Flask(__name__)
 
 # Channel Access Token
@@ -64,7 +64,7 @@ def callback():
 # 處理訊息
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    message = TextSendMessage(text=chatGPT(event.message.text, chatGPT_token))
+    message = TextSendMessage(text=chatGPT(user, event.message.text, chatGPT_token))
     line_bot_api.reply_message(event.reply_token, message)
 
 

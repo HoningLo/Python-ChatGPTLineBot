@@ -9,14 +9,14 @@ import os
 import requests
 import json
 
-def chatGPT(msg, chatGPT_token):
-    url = "https://api.openai.com/v1/completions"
+def chatGPT(user, msg, chatGPT_token):
+    url = "https://api.openai.com/v1/chat/completions"
     headers = {'Content-Type': 'application/json',
                'Authorization': f'Bearer {chatGPT_token}'
                } 
     data = {
-        "model": "text-davinci-003",
-        "prompt": f"{msg}",
+        "model": "gpt-3.5-turbo-0301",
+        "messages": [{"role": f"{user}", "content": f"{msg}"}],
         "max_tokens": 4000,
         "temperature": 0.3,
         "top_p": 1,
@@ -25,17 +25,19 @@ def chatGPT(msg, chatGPT_token):
         }
     response = requests.post(url, data = json.dumps(data), headers=headers)
     print(response.status_code)
-    return response.json()["choices"][0]["text"]
+    return response.json()["choices"][0]["message"]["content"].strip()
 
 
 if __name__ == "__main__":
     # Get Configuration Settings
     folder_path = os.path.dirname(os.path.abspath(__file__))
+    folder_path = r"C:\Users\lo\Desktop\LinebotWebAPP-Deploy\Python-ChatGPTLineBot-Dev-gpt-3.5-turbo-0301\appsettings.json"
     CONFIG = json.load(open(f"{folder_path}/../appsettings.json", "r"))
     chatGPT_token = CONFIG["OpenAI"]["CHATGPT_TOKEN"]
 
     # Run
+    user = "user"
     msg="Say this is a test"
-    answer = chatGPT(msg, chatGPT_token)
+    answer = chatGPT(user, msg, chatGPT_token)
     print(answer)
 
