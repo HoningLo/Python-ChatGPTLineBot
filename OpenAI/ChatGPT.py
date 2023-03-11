@@ -31,7 +31,6 @@ def chatGPT(user, msg, chatGPT_token):
 if __name__ == "__main__":
     # Get Configuration Settings
     folder_path = os.path.dirname(os.path.abspath(__file__))
-    folder_path = r"C:\Users\lo\Desktop\LinebotWebAPP-Deploy\Python-ChatGPTLineBot-Dev-gpt-3.5-turbo-0301\appsettings.json"
     CONFIG = json.load(open(f"{folder_path}/../appsettings.json", "r"))
     chatGPT_token = CONFIG["OpenAI"]["CHATGPT_TOKEN"]
 
