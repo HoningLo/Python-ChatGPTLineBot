@@ -5,7 +5,7 @@ Created on Sat Jan 15 22:47:35 2022
 @author: lo
 """
 
-# from dotenv import load_dotenv
+from dotenv import load_dotenv
 import os
 
 # import requests
@@ -24,14 +24,19 @@ from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
 )
 
-from api.ChatGPT import chatGPT
+from api.ChatGPT import chatGPT, azure_chatGPT
 from api.MessageMemory import Memory
 
 # Get Configuration Settings
-CONFIG = json.load(open("./appsettings.json", "r"))
-channel_access_token = CONFIG["Line"]["LINE_CHANNEL_ACCESS_TOKEN"]
-channel_secret = CONFIG["Line"]["LINE_CHANNEL_SECRET"]
-chatGPT_token = CONFIG["OpenAI"]["CHATGPT_TOKEN"]
+load_dotenv()
+channel_access_token = os.getenv("LINE_CHANNEL_SECRET")
+channel_secret = os.getenv("LINE_CHANNEL_SECRET")
+chatGPT_token = os.getenv("CHATGPT_TOKEN")
+model = os.getenv("MODEL")
+is_azure_openai = bool(os.getenv("IS_AZURE_OPENAI"))
+azure_endpoint = os.getenv("AZURE_ENDPOINT")
+deployment_name = os.getenv("DEPLOYMENT_NAME")
+api_version = os.getenv("API_VERSION")
 
 # Initial Setting
 memory_dict = {}
@@ -83,7 +88,10 @@ def handle_message(event):
     prompt = memory.generate_prompt()
     print(f"prompt: {prompt}")
     # Get the message  from the chatbot
-    reply_message = chatGPT(prompt, chatGPT_token)
+    if(is_azure_openai):
+        reply_message = azure_chatGPT(prompt, chatGPT_token, model, azure_endpoint, deployment_name, api_version)
+    else:
+        reply_message = chatGPT(prompt, chatGPT_token, model)
     print(f"reply_message: {reply_message}")
 
     # Add the AI's response to the memory

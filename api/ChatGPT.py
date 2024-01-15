@@ -4,18 +4,41 @@ Created on Thu Dec  8 20:20:42 2022
 
 @author: lo
 """
-# from dotenv import load_dotenv
+from dotenv import load_dotenv
 import os
 import requests
 import json
 
-def chatGPT(prompt, chatGPT_token):
+def chatGPT(prompt, chatGPT_token, model):
     url = "https://api.openai.com/v1/chat/completions"
     headers = {'Content-Type': 'application/json',
                'Authorization': f'Bearer {chatGPT_token}'
                } 
     data = {
-        "model": "gpt-3.5-turbo-0301",
+        "model": f"{model}",
+        "messages": [{"role":"system",
+                      "content":"You are an AI assistant helping people find information.\
+                      Chinese is represented by the language code zh-Hant.\
+                      English is represented by the language code en-US."}
+                      ] + prompt,
+        "temperature":0.7,
+        "max_tokens":800,
+        "top_p":0.95,
+        "frequency_penalty":0,
+        "presence_penalty":0,
+        "stop":None
+        }
+    response = requests.post(url, data = json.dumps(data), headers=headers)
+    print(response.status_code)
+    return response.json()["choices"][0]["message"]
+
+def azure_chatGPT(prompt, chatGPT_token, model, azure_endpoint, deployment_name, api_version):
+    url = f"{azure_endpoint}/openai/deployments/{deployment_name}/chat/completions?api-version={api_version}"
+    headers = {'Content-Type': 'application/json',
+               'api-key': f'{chatGPT_token}'
+               } 
+    data = {
+        "model": f"{model}",
         "messages": [{"role":"system",
                       "content":"You are an AI assistant helping people find information.\
                       Chinese is represented by the language code zh-Hant.\
@@ -36,9 +59,16 @@ if __name__ == "__main__":
     from MessageMemory import Memory
 
     # Get Configuration Settings
-    folder_path = os.path.dirname(os.path.abspath(__file__))
-    CONFIG = json.load(open(f"{folder_path}/../appsettings.json", "r"))
-    chatGPT_token = CONFIG["OpenAI"]["CHATGPT_TOKEN"]
+    # folder_path = os.path.dirname(os.path.abspath(__file__))
+    load_dotenv(r"../.env", override=True)
+    channel_access_token = os.getenv("LINE_CHANNEL_SECRET")
+    channel_secret = os.getenv("LINE_CHANNEL_SECRET")
+    chatGPT_token = os.getenv("CHATGPT_TOKEN")
+    model = os.getenv("MODEL")
+    is_azure_openai = bool(os.getenv("IS_AZURE_OPENAI"))
+    azure_endpoint = os.getenv("AZURE_ENDPOINT")
+    deployment_name = os.getenv("DEPLOYMENT_NAME")
+    api_version = os.getenv("API_VERSION")
     memory = Memory(maxlen=5)
 
     # Run
@@ -52,8 +82,11 @@ if __name__ == "__main__":
         # Generate a prompt based on the memory
         prompt = memory.generate_prompt()
 
-        # Get the answer from the GPT-2 chatbot
-        answer = chatGPT(prompt, chatGPT_token)
+        # Get the answer from the GPT chatbot
+        if(is_azure_openai):
+            answer = azure_chatGPT(prompt, chatGPT_token, model, azure_endpoint, deployment_name, api_version)
+        else:
+            answer = chatGPT(prompt, chatGPT_token, model)
         print(answer["content"].strip())
 
         # Add the AI's response to the memory
