@@ -29,7 +29,7 @@ from api.MessageMemory import Memory
 
 # Get Configuration Settings
 load_dotenv()
-channel_access_token = os.getenv("LINE_CHANNEL_SECRET")
+channel_access_token = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
 channel_secret = os.getenv("LINE_CHANNEL_SECRET")
 chatGPT_token = os.getenv("CHATGPT_TOKEN")
 model = os.getenv("MODEL")

@@ -61,7 +61,7 @@ if __name__ == "__main__":
     # Get Configuration Settings
     # folder_path = os.path.dirname(os.path.abspath(__file__))
     load_dotenv(r"../.env", override=True)
-    channel_access_token = os.getenv("LINE_CHANNEL_SECRET")
+    channel_access_token = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
     channel_secret = os.getenv("LINE_CHANNEL_SECRET")
     chatGPT_token = os.getenv("CHATGPT_TOKEN")
     model = os.getenv("MODEL")
